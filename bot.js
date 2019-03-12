@@ -9,37 +9,36 @@ const bot = new TelegramBot(token, {
 
 var Datos;
 bot.on('message', (msg) => {
-	const chatId = msg.chat.id;
-	var matricula = msg.text;
-	if (patt.test(matricula)) {
-		bot.sendMessage(chatId, 'Es una matricula valida, dame un segundo y te mando los datos');
-		(async () => {
-			const browser = await puppeteer.launch();
-			const page = await browser.newPage();
-			await page.goto('http://www.atib.es/TA/modelos/Modelo.aspx?m=621');
-			await page.type('#cph_main_cph_main_621_0_nifC', 'ABC');
-			await page.type('#cph_main_cph_main_621_0_apenomC', 'ABC');
-			await page.type('#cph_main_cph_main_621_0_numMatricu2', matricula);
-			await page.type('#cph_main_cph_main_621_0_txtnif', 'ABC');
-			await page.type('#cph_main_cph_main_621_0_txtnombre', 'ABC');
-			await page.click('#cph_main_cph_main_621_0_lnkBuscarTrafico');
-			await page.waitFor(7600);
-			Datos = await page.evaluate(() => {
-				return {
-					bastidor: document.getElementById('cph_main_cph_main_621_0_bastidorSV').value,
-					marca: document.getElementById('cph_main_cph_main_621_0_marcaVeh').value,
-					modelo: document.getElementById('cph_main_cph_main_621_0_modeloVeh').value,
-					cilindrada: document.getElementById('cph_main_cph_main_621_0_cilindrada').value,
-					fechaMat: document.getElementById('cph_main_cph_main_621_0_fechaMatri').value
-				};
-			});
-			console.log('Datos:', Datos);
-			bot.sendMessage(chatId, 'Esto es lo que he encontrado:\n Marca: ' + Datos.marca + '\nModelo: ' + Datos.modelo + '\nBastidor: ' + Datos.bastidor + '\nCilindrada: ' + Datos.cilindrada + '\nFecha de matriculacion: ' + Datos.fechaMat);
-		})();
-		
+    const chatId = msg.chat.id;
+    var matricula = msg.text;
+    if (patt.test(matricula)) {
+        bot.sendMessage(chatId, 'Es una matricula valida, dame un segundo y te mando los datos');
+        (async () => {
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto('http://www.atib.es/TA/modelos/Modelo.aspx?m=621');
+            await page.type('#cph_main_cph_main_621_0_nifC',matricula);
+            await page.type('#cph_main_cph_main_621_0_apenomC', matricula);
+            await page.type('#cph_main_cph_main_621_0_numMatricu2', matricula);
+            await page.type('#cph_main_cph_main_621_0_txtnif', matricula);
+            await page.type('#cph_main_cph_main_621_0_txtnombre', matricula);
+            await page.click('#cph_main_cph_main_621_0_lnkBuscarTrafico');
+            await page.waitFor(7600);
+            Datos = await page.evaluate(() => {
+                return {
+                    bastidor: document.getElementById('cph_main_cph_main_621_0_bastidorSV').value,
+                    marca: document.getElementById('cph_main_cph_main_621_0_marcaVeh').value,
+                    modelo: document.getElementById('cph_main_cph_main_621_0_modeloVeh').value,
+                    cilindrada: document.getElementById('cph_main_cph_main_621_0_cilindrada').value,
+                    fechaMat: document.getElementById('cph_main_cph_main_621_0_fechaMatri').value
+                };
+            });
+            console.log('Datos:', Datos);
+            bot.sendMessage(chatId, 'Esto es lo que he encontrado:\nMarca: ' + Datos.marca + '\nModelo: ' + Datos.modelo + '\nBastidor: ' + Datos.bastidor + '\nCilindrada: ' + Datos.cilindrada + '\nFecha de matriculacion: ' + Datos.fechaMat);
+            await browser.close();
+        })();
 
-	} else {
-		bot.sendMessage(chatId, 'No es una matricula valida');
-	}
+    } else {
+        bot.sendMessage(chatId, 'No es una matricula valida');
+    }
 });
-
