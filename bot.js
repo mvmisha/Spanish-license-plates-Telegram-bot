@@ -23,7 +23,7 @@ bot.on('message', (msg) => {
             await page.type('#cph_main_cph_main_621_0_txtnif', matricula);
             await page.type('#cph_main_cph_main_621_0_txtnombre', matricula);
             await page.click('#cph_main_cph_main_621_0_lnkBuscarTrafico');
-            await page.waitFor(20000);
+            await page.waitForSelector('#cph_main_cph_main_621_0_bastidorSV');
             Datos = await page.evaluate(() => {
                 return {
                     bastidor: document.getElementById('cph_main_cph_main_621_0_bastidorSV').value,
