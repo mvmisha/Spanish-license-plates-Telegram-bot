@@ -16,6 +16,7 @@ public class LicensePlatesController {
   public ResponseEntity<CarModel> reportRequest(@RequestBody LicensePlateModel licensePlate) {
 
     CarModel car = new CarModel();
+    
 
     return new ResponseEntity<>(car, HttpStatus.OK);
 
